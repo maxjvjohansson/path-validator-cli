@@ -1,9 +1,35 @@
 {
+  "name": "path-validator-cli",
+  "version": "1.0.0",
+  "description": "A CLI tool to validate and fix broken paths in a project. Prevent deployment issues by validating and correcting paths directly in your codebase.",
+  "type": "module",
+  "bin": {
+    "path-validator": "./bin/index.js"
+  },
+  "scripts": {
+    "start": "node bin/index.js",
+    "test": "node test/"
+  },
   "dependencies": {
     "chalk": "^5.4.1",
     "commander": "^13.1.0",
     "fast-glob": "^3.3.3",
     "inquirer": "^12.4.1",
     "ora": "^8.2.0"
-  }
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "chai": "^5.1.0" 
+  },
+  "engines": {
+    "node": ">=18" 
+  },
+  "keywords": [
+    "cli",
+    "path-validator",
+    "broken-links",
+    "url-checker"
+  ],
+  "author": "Max Johansson & Jesper Skeppstedt",
+  "license": "MIT"
 }

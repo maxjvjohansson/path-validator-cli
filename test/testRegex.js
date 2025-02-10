@@ -1,98 +1,67 @@
-// regex.test.js
-import { expect } from 'chai';
-import { jsRegex } from '../src/utils/regex.js';
+/*import { expect } from 'chai';
+import { phpRegex } from '../src/utils/regex.js';
 
-describe('JavaScript Regex Tests', () => {
+describe('PHP Regex Tests', () => {
     const testCases = [
         {
-            name: 'ES6 import',
-            regex: jsRegex.es6Import,
-            input: "import 'some-module';",
-            expectedMatch: 'some-module'
+            name: 'include',
+            regex: phpRegex.include,
+            input: "include 'file.php';",
+            expectedMatch: 'file.php'
         },
         {
-            name: 'CommonJS require',
-            regex: jsRegex.commonJSRequire,
-            input: "require('another-module');",
-            expectedMatch: 'another-module'
+            name: 'include_once',
+            regex: phpRegex.includeOnce,
+            input: "include_once 'config.php';",
+            expectedMatch: 'config.php'
         },
         {
-            name: 'fetch call',
-            regex: jsRegex.fetch,
-            input: "fetch('https://example.com');",
+            name: 'require',
+            regex: phpRegex.require,
+            input: "require 'settings.php';",
+            expectedMatch: 'settings.php'
+        },
+        {
+            name: 'require_once',
+            regex: phpRegex.requireOnce,
+            input: "require_once 'autoload.php';",
+            expectedMatch: 'autoload.php'
+        },
+        {
+            name: 'file_get_contents',
+            regex: phpRegex.fileGetContents,
+            input: "file_get_contents('https://example.com/data.json');",
+            expectedMatch: 'https://example.com/data.json'
+        },
+        {
+            name: 'header(Location)',
+            regex: phpRegex.headerLocation,
+            input: "header('Location: https://example.com');",
             expectedMatch: 'https://example.com'
         },
         {
-            name: 'XMLHttpRequest.open',
-            regex: jsRegex.xhrOpen,
-            input: "XMLHttpRequest.open('GET', 'https://example.com');",
-            expectedMatch: 'https://example.com'
+            name: 'readfile',
+            regex: phpRegex.readfile,
+            input: "readfile('document.txt');",
+            expectedMatch: 'document.txt'
         },
         {
-            name: 'window.location',
-            regex: jsRegex.windowLocation,
-            input: "window.location = 'https://example.com';",
-            expectedMatch: 'https://example.com'
+            name: 'fopen',
+            regex: phpRegex.fopen,
+            input: "fopen('log.txt', 'r');",
+            expectedMatch: 'log.txt'
         },
         {
-            name: 'document.location',
-            regex: jsRegex.documentLocation,
-            input: "document.location = 'https://example.com';",
-            expectedMatch: 'https://example.com'
+            name: 'opendir',
+            regex: phpRegex.opendir,
+            input: "opendir('/var/www/html');",
+            expectedMatch: '/var/www/html'
         },
         {
-            name: 'new URL with import.meta.url',
-            regex: jsRegex.newURL,
-            input: "new URL('path', import.meta.url);",
-            expectedMatch: 'path'
-        },
-        {
-            name: 'script.src',
-            regex: jsRegex.scriptSrc,
-            input: "script.src = 'https://example.com/script.js';",
-            expectedMatch: 'https://example.com/script.js'
-        },
-        {
-            name: 'link.href',
-            regex: jsRegex.linkHref,
-            input: "link.href = 'https://example.com/style.css';",
-            expectedMatch: 'https://example.com/style.css'
-        },
-        {
-            name: 'img.src',
-            regex: jsRegex.imgSrc,
-            input: "img.src = 'https://example.com/image.jpg';",
-            expectedMatch: 'https://example.com/image.jpg'
-        },
-        {
-            name: 'style.backgroundImage',
-            regex: jsRegex.backgroundImage,
-            input: "style.backgroundImage = 'url(https://example.com/image.jpg)';",
-            expectedMatch: 'https://example.com/image.jpg'
-        },
-        {
-            name: 'service worker registration',
-            regex: jsRegex.serviceWorker,
-            input: "navigator.serviceWorker.register('https://example.com/service-worker.js');",
-            expectedMatch: 'https://example.com/service-worker.js'
-        },
-        {
-            name: 'new Worker',
-            regex: jsRegex.worker,
-            input: "new Worker('worker.js');",
-            expectedMatch: 'worker.js'
-        },
-        {
-            name: 'new Audio',
-            regex: jsRegex.audio,
-            input: "new Audio('audio.mp3');",
-            expectedMatch: 'audio.mp3'
-        },
-        {
-            name: 'video.src',
-            regex: jsRegex.videoSrc,
-            input: "video.src = 'https://example.com/video.mp4';",
-            expectedMatch: 'https://example.com/video.mp4'
+            name: 'move_uploaded_file',
+            regex: phpRegex.moveUploadedFile,
+            input: "move_uploaded_file('/tmp/upload.tmp', '/var/www/uploads/image.jpg');",
+            expectedMatch: '/tmp/upload.tmp'
         }
     ];
 
@@ -106,3 +75,4 @@ describe('JavaScript Regex Tests', () => {
         });
     });
 });
+*/

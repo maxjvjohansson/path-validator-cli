@@ -1,5 +1,5 @@
 // ----------------------------------------
-// HTML Regex
+// HTML Regex - Matches attributes containing URLs in HTML elements
 // ----------------------------------------
 export const htmlRegex = {
     src: /<(?:img|script|iframe|audio|video|source)\s+[^>]*?src=["'](.*?)["']/gi,
@@ -11,7 +11,7 @@ export const htmlRegex = {
 };
 
 // ----------------------------------------
-// CSS Regex
+// CSS Regex - CSS Regex - Matches URLs in CSS properties such as background-image, @import, cursor, etc.
 // ----------------------------------------
 export const cssRegex = {
     url: /@import\s+url\(['"]?(.*?)['"]?\)|(?:background-image|cursor|border-image|mask-image|filter|clip-path|content)\s*:\s*url\(['"]?(.*?)['"]?\)/gi,
@@ -26,7 +26,7 @@ export const cssRegex = {
 };
 
 // ----------------------------------------
-// JavaScript Regex
+// JavaScript Regex - JavaScript Regex - Matches various JavaScript methods and properties that reference external resources
 // ----------------------------------------
 export const jsRegex = {
     es6Import: /import\s+['"]([^'"]+)['"]/gi,
@@ -44,4 +44,20 @@ export const jsRegex = {
     worker: /new\s+Worker\s*\(\s*['"]([^'"]+)['"]\s*\)/gi,
     audio: /new\s+Audio\s*\(\s*['"]([^'"]+)['"]\s*\)/gi,
     videoSrc: /video\.src\s*=\s*['"]([^'"]+)['"]/gi
+};
+
+// ----------------------------------------
+// PHP Regex - PHP Regex - Matches PHP functions that include or reference external files and URLs
+// ----------------------------------------
+export const phpRegex = {
+    include: /include\s*['"]([^'"]+)['"];/gi,
+    includeOnce: /include_once\s*['"]([^'"]+)['"];/gi,
+    require: /require\s*['"]([^'"]+)['"];/gi,
+    requireOnce: /require_once\s*['"]([^'"]+)['"];/gi,
+    fileGetContents: /file_get_contents\s*\(\s*['"]([^'"]+)['"]\s*\)/gi,
+    headerLocation: /header\s*\(\s*['"]Location:\s*([^'"]+)['"]\s*\)/gi,
+    readfile: /readfile\s*\(\s*['"]([^'"]+)['"]\s*\)/gi,
+    fopen: /fopen\s*\(\s*['"]([^'"]+)['"]\s*,\s*['"][^'"]+['"]\s*\)/gi,
+    opendir: /opendir\s*\(\s*['"]([^'"]+)['"]\s*\)/gi,
+    moveUploadedFile: /move_uploaded_file\s*\(\s*['"]([^'"]+)['"]\s*,\s*['"][^'"]+['"]\s*\)/gi
 };

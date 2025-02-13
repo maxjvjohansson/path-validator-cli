@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node bin/index.js",
-    "test": "node test/"
+    "test": "mocha test/**/*.js"
   },
   "dependencies": {
     "chalk": "^5.4.1",

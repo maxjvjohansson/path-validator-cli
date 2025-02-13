@@ -30,6 +30,7 @@ export const cssRegex = {
 // JavaScript Regex - JavaScript Regex - Matches various JavaScript methods and properties that reference external resources
 // ----------------------------------------
 export const jsRegex = {
+
     import: /import\s+[^'"]*['"]([^'"]+)['"]/gi,
     require: /require\s*\(\s*["']([^"']+)["']\s*\)/gi,
     es6Import: /import\s+['"]([^'"]+)['"]/gi,
@@ -63,4 +64,6 @@ export const phpRegex = {
     fopen: /fopen\s*\(\s*['"]([^'"]+)['"]\s*,\s*['"][^'"]+['"]\s*\)/gi,
     opendir: /opendir\s*\(\s*['"]([^'"]+)['"]\s*\)/gi,
     moveUploadedFile: /move_uploaded_file\s*\(\s*['"]([^'"]+)['"]\s*,\s*['"][^'"]+['"]\s*\)/gi
+
 };
+

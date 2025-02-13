@@ -16,7 +16,8 @@ export const htmlRegex = {
 export const cssRegex = {
     url: /@import\s+url\(['"]?(.*?)['"]?\)|(?:background-image|cursor|border-image|mask-image|filter|clip-path|content)\s*:\s*url\(['"]?(.*?)['"]?\)/gi,
     backgroundImage: /background-image\s*:\s*url\(['"]?(.*?)['"]?\)/gi,
-    import: /@import\s+url\(['"]?(.*?)['"]?\)/gi,
+    background: /url\(["']?([^"')]+)["']?\)/gi,
+    import: /@import\s+["']([^"']+)["']/gi,
     cursor: /cursor\s*:\s*url\(['"]?(.*?)['"]?\)/gi,
     content: /content\s*:\s*url\(['"]?(.*?)['"]?\)/gi,
     borderImage: /border-image\s*:\s*url\(['"]?(.*?)['"]?\)/gi,
@@ -29,6 +30,8 @@ export const cssRegex = {
 // JavaScript Regex - JavaScript Regex - Matches various JavaScript methods and properties that reference external resources
 // ----------------------------------------
 export const jsRegex = {
+    import: /import\s+[^'"]*['"]([^'"]+)['"]/gi,
+    require: /require\s*\(\s*["']([^"']+)["']\s*\)/gi,
     es6Import: /import\s+['"]([^'"]+)['"]/gi,
     commonJSRequire: /require\s*\(\s*['"]([^'"]+)['"]\s*\)/gi,
     fetch: /fetch\s*\(\s*['"]([^'"]+)['"]\s*\)/gi,

@@ -19,8 +19,32 @@ export function parseCSS(content, filePath, projectRoot) {
 //---------------------------------------
 // Parses JavaScript content and extracts paths.
 //---------------------------------------
+// Array containing built in modules that are supposed to not get flagged falsely as invalid paths by the program
+const nodeBuiltInModules = new Set([
+    'fs', 'fs/promises', 'path', 'os', 'util', 'crypto', 'http', 'https', 'stream', 'events',
+    'child_process', 'cluster', 'dns', 'net', 'tls', 'zlib', 'buffer', 'vm', 'url',
+    'querystring', 'assert', 'readline', 'string_decoder', 'timers', 'tty', 'dgram'
+]);
+
 export function parseJS(content, filePath, projectRoot) {
-    return parseWithRegex(content, filePath, jsRegex, 'JavaScript', projectRoot);
+    const { validMatches, invalidMatches } = parseWithRegex(content, filePath, jsRegex, 'JavaScript', projectRoot);
+
+    return {
+        validMatches,
+        invalidMatches: invalidMatches.filter(match => {
+            const extractedPath = match.path;
+
+            if (nodeBuiltInModules.has(extractedPath)) {
+                return false;
+            }
+
+            if (!extractedPath.startsWith('.') && !extractedPath.startsWith('/') && !extractedPath.includes('/')) {
+                return false;
+            }
+
+            return true;
+        })
+    };
 }
 
 //---------------------------------------

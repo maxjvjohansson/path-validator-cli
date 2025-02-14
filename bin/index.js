@@ -2,7 +2,7 @@
 
 import { Command } from 'commander';
 import { validatePaths } from '../src/core/validatePaths.js';
-import { fixPaths } from '../src/core/fix.js';
+import { fixPaths } from '../src/core/fixPaths.js';
 import { promptFixPaths } from '../src/cli/prompts.js';
 import { showResults, showSummary } from '../src/cli/output.js';
 

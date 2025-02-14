@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { searchPaths } from './searchFiles.js';
-import { parseHTML, parseCSS, parseJS, parsePHP } from '../utils/parser.js';
+import { parseHTML, parseCSS, parseJS, parsePHP } from '../utils/parsedContent.js';
 
 /**
  * Validate extracted paths to check if they exist in the project or are valid URLs.

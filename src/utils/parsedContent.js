@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { htmlRegex, cssRegex, jsRegex, phpRegex } from './regex.js';
+import { htmlRegex, cssRegex, jsRegex, phpRegex } from './regexPatterns.js';
 
 //---------------------------------------
 // Parses HTML content and extracts paths.

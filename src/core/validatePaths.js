@@ -10,7 +10,6 @@ import { parseHTML, parseCSS, parseJS, parsePHP } from '../utils/parser.js';
  */
 export async function validatePaths(projectRoot) {
     const files = await searchPaths(projectRoot);
-
     const validPaths = [];
     const invalidPaths = [];
 
@@ -29,16 +28,49 @@ export async function validatePaths(projectRoot) {
             const extractedPaths = parser(content, file.path, projectRoot);
 
             for (const pathData of extractedPaths.invalidMatches) {
-                let fullPath = pathData.path;
-                if (pathData.type === 'relative') {
-                    fullPath = path.resolve(path.dirname(file.path), pathData.path);
+                const importPath = pathData.path;
+
+                let fullPath = path.resolve(path.dirname(file.path), importPath);
+
+                // Flag absolute paths that will not work deployed
+                if (importPath.startsWith('/')) {
+                    const possibleRelativePath = path.relative(file.path, fullPath);
+
+                    // Flag if file exists in projectroot but not in webroot
+                    if (!fs.existsSync(fullPath)) {
+                        invalidPaths.push({
+                            ...pathData,
+                            issue: 'Absolute path will not work after deployment',
+                            suggestion: `Use relative path: ${possibleRelativePath}`
+                        });
+                    }
+                    continue;
                 }
 
-                if (fs.existsSync(fullPath)) {
-                    validPaths.push(pathData);
-                } else {
-                    invalidPaths.push(pathData);
+                // Flag relative paths that escapes project root
+                if (importPath.startsWith('..')) {
+                    const outsideProject = !fullPath.startsWith(projectRoot);
+                    if (outsideProject) {
+                        invalidPaths.push({
+                            ...pathData,
+                            issue: 'Relative path escapes project root',
+                            suggestion: `Reconsider path: ${importPath}`
+                        });
+                    }
+                    continue;
                 }
+
+                // Flag if relative path doesn't point to an actual file
+                if (!fs.existsSync(fullPath)) {
+                    invalidPaths.push({
+                        ...pathData,
+                        issue: 'File does not exist',
+                        suggestion: `Check if ${importPath} should be ${path.relative(path.dirname(file.path), fullPath)}`
+                    });
+                    continue;
+                }
+
+                validPaths.push(pathData);
             }
         }
     }

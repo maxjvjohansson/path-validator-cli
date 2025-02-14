@@ -13,7 +13,21 @@ export function parseHTML(content, filePath, projectRoot) {
 // Parses CSS content and extracts paths.
 //---------------------------------------
 export function parseCSS(content, filePath, projectRoot) {
-    return parseWithRegex(content, filePath, cssRegex, 'CSS', projectRoot);
+    const extractedPaths = parseWithRegex(content, filePath, cssRegex, 'CSS', projectRoot);
+
+    // Filter out duplicates from the same file (ex: to not falsely flag background url twice or more)
+    const uniquePaths = [];
+    const seenPaths = new Set();
+
+    for (const pathData of extractedPaths.invalidMatches) {
+        const key = `${filePath}:${pathData.path}`;
+        if (!seenPaths.has(key)) {
+            seenPaths.add(key);
+            uniquePaths.push(pathData);
+        }
+    }
+
+    return { validMatches: extractedPaths.validMatches, invalidMatches: uniquePaths };
 }
 
 //---------------------------------------

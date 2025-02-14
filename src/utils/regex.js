@@ -30,9 +30,8 @@ export const cssRegex = {
 // JavaScript Regex - JavaScript Regex - Matches various JavaScript methods and properties that reference external resources
 // ----------------------------------------
 export const jsRegex = {
-
-    import: /import\s+[^'"]*['"]([^'"]+)['"]/gi,
-    require: /require\s*\(\s*["']([^"']+)["']\s*\)/gi,
+    import: /import\s+[^'"]*['"](?![a-zA-Z0-9_-]+$)([^'"]+)['"]/gi,
+    require: /require\s*\(\s*["'](?![a-zA-Z0-9_-]+$)([^"']+)["']\s*\)/gi,
     es6Import: /import\s+['"]([^'"]+)['"]/gi,
     commonJSRequire: /require\s*\(\s*['"]([^'"]+)['"]\s*\)/gi,
     fetch: /fetch\s*\(\s*['"]([^'"]+)['"]\s*\)/gi,

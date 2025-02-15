@@ -27,51 +27,57 @@ export async function validatePaths(projectRoot) {
         if (parser) {
             const extractedPaths = parser(content, file.path, projectRoot);
 
-            for (const pathData of extractedPaths.invalidMatches) {
+            extractedPaths.invalidMatches.forEach(pathData => {
                 const importPath = pathData.path;
-
                 let fullPath = path.resolve(path.dirname(file.path), importPath);
 
-                // Flag absolute paths that will not work deployed
+                // Case 1: Flag absolute paths that may break after deployment
                 if (importPath.startsWith('/')) {
-                    const possibleRelativePath = path.relative(file.path, fullPath);
-
-                    // Flag if file exists in projectroot but not in webroot
-                    if (!fs.existsSync(fullPath)) {
-                        invalidPaths.push({
-                            ...pathData,
-                            issue: 'Absolute path will not work after deployment',
-                            suggestion: `Use relative path: ${possibleRelativePath}`
-                        });
-                    }
-                    continue;
-                }
-
-                // Flag relative paths that escapes project root
-                if (importPath.startsWith('..')) {
-                    const outsideProject = !fullPath.startsWith(projectRoot);
-                    if (outsideProject) {
-                        invalidPaths.push({
-                            ...pathData,
-                            issue: 'Relative path escapes project root',
-                            suggestion: `Reconsider path: ${importPath}`
-                        });
-                    }
-                    continue;
-                }
-
-                // Flag if relative path doesn't point to an actual file
-                if (!fs.existsSync(fullPath)) {
+                    pathData.issue = "absolutePath";
                     invalidPaths.push({
                         ...pathData,
-                        issue: 'File does not exist',
-                        suggestion: `Check if ${importPath} should be ${path.relative(path.dirname(file.path), fullPath)}`
+                        suggestion: `Use a relative path instead: ${path.relative(file.path, fullPath)}`
                     });
-                    continue;
+                    return;
                 }
 
-                validPaths.push(pathData);
-            }
+                // Case 2: Flag if the file does not exist
+                if (!fs.existsSync(fullPath)) {
+                    pathData.issue = "missingFile";
+                    invalidPaths.push({
+                        ...pathData,
+                        suggestion: "Check if the file was moved or renamed manually."
+                    });
+                    return;
+                }
+
+                // Case 3: Flag relative paths that escape the project root
+                if (importPath.startsWith('..') && !fullPath.startsWith(projectRoot)) {
+                    pathData.issue = "tooManyBack";
+                    invalidPaths.push({
+                        ...pathData,
+                        suggestion: "Adjust the path to stay within the project root."
+                    });
+                    return;
+                }
+
+                // Case 4: Incorrect relative paths (e.g., `../` instead of `./`)
+                if (importPath.startsWith("./") || importPath.startsWith("../")) {
+                    pathData.issue = "incorrectRelative";
+                    invalidPaths.push({
+                        ...pathData,
+                        suggestion: "Try './' instead of '../' if the file is in the same folder."
+                    });
+                    return;
+                }
+
+                // Case 5: If no known issue type is found, flag as unknown
+                pathData.issue = "unknownPath";
+                invalidPaths.push({
+                    ...pathData,
+                    suggestion: "This path could not be classified. Please check manually."
+                });
+            });
         }
     }
 

@@ -1,45 +1,50 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
+import ora from 'ora';
 import { validatePaths } from '../src/core/validatePaths.js';
 import { fixPaths } from '../src/core/fixPaths.js';
-import { promptFixPaths } from '../src/cli/prompts.js';
-import { showResults, showSummary } from '../src/cli/output.js';
+import { askForAutoCorrect } from '../src/cli/prompts.js';
+import { showResults, showErrorMessage, showSearchingMessage, showFixingMessage, showAllFixedMessage, showNoChangesMessage } from '../src/cli/output.js';
 
-// Get projectroot
 const projectRoot = process.cwd();
-
-// Create commander CLI
 const program = new Command();
 
 program
-    .name('path-validator')
-    .version('1.0.0')
-    .description('Validate and fix broken file paths in your project');
-
-program
-    .option('--check-only', 'Only validate paths without fixing them')
+    .name("path-validator")
+    .version("1.0.0")
+    .description("Validate and fix broken file paths in your project")
+    .option("--check-only", "Only validate paths without fixing them")
     .action(async (options) => {
-        const { validPaths, invalidPaths } = await validatePaths(projectRoot);
+        showSearchingMessage();
 
-        showResults(validPaths, invalidPaths);
+        const spinner = ora("Scanning project for paths...").start();
 
-        if (options.checkOnly) {
-            showSummary(invalidPaths.length, false);
-            return;
-        }
+        try {
+            const { validPaths, invalidPaths } = await validatePaths(projectRoot);
 
-        if (invalidPaths.length > 0) {
-            const shouldFix = await promptFixPaths();
-            if (shouldFix) {
-                await fixPaths(projectRoot);
-            } else {
-                showSummary(invalidPaths.length, false);
+            spinner.stop();
+            showResults(invalidPaths);
+
+            if (options.checkOnly) return;
+
+            if (invalidPaths.length > 0) {
+                const shouldFix = await askForAutoCorrect();
+                if (shouldFix) {
+                    showFixingMessage();
+                    await fixPaths(projectRoot);
+                    showAllFixedMessage();
+                } else {
+                    showNoChangesMessage();
+                }
             }
-        } else {
-            showSummary(0, true);
+        } catch (error) {
+            spinner.stop();
+            showErrorMessage(error);
         }
     });
 
 program.parse(process.argv);
+
+
 

@@ -22,15 +22,23 @@ export const errorMessages = {
 };
 
 export const messages = {
+    // Validation messages
     validationStart: "🔍 Running path validation...\n",
     validationComplete: (count) =>
         count > 0
             ? `\n📌 ${count} issues found. Run 'path-validator' without '--check-only' to fix them.`
             : "\n✅ No issues found. Your paths are clean!\n",
-    fixingPaths: "🔧 Fixing invalid paths...",
-    allFixed: "\n✅ All paths have been fixed!\n",
-    noChanges: "\n📌 No changes were made. Exiting.\n",
     errorOccurred: "❌ An error occurred during validation.",
+    
+    // Fixing messages
+    fixingPathsStart: "🔧 Fixing invalid paths...",
+    fixingPath: (oldPath, newPath) => `🔧 Fixing ${oldPath} → ${newPath}`,
+    cannotFix: (path) => `❌ Cannot fix: ${path} (Manual fix required)`,
+    fixComplete: "✅ Path correction complete!",
+    noInvalidPaths: "✅ No invalid paths found!",
+    foundInvalidPaths: (count) => `🔎 Found ${count} invalid paths. Attempting to fix...\n`,
+    
+    // Label messages
     fileReference: "File referenced in",
     lineReference: "Line",
     suggestionLabel: "Suggestion"

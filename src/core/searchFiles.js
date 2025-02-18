@@ -18,7 +18,22 @@ export async function searchPaths(directory, options = {}) {
   const {
     pattern = '**/*',  // Default pattern matches all files and directories
     extensions = ['.js', '.html', '.css', '.php'],  // Default file extensions to search for
-    exclude = ['**/node_modules/**', '**/dist/**']  // Directories to exclude from search
+    exclude = [
+      '**/node_modules/**', 
+      '**/dist/**', 
+      '**/vendor/**', 
+      '**/build/**', 
+      '**/out/**', 
+      '**/target/**', 
+      '**/.git/**', 
+      '**/.svn/**', 
+      '**/.hg/**', 
+      '**/tmp/**', 
+      '**/temp/**', 
+      '**/.cache/**', 
+      '**/.vscode/**', 
+      '**/.idea/**'
+    ]  // Directories to exclude from search
   } = options;
 
   // Create search pattern - if pattern includes a dot, use as is, otherwise append extensions

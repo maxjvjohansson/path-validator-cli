@@ -1,0 +1,8 @@
+body {
+    background-image: url("../assets/images/logo.png");  /* ❌ Fel - Absolut path */
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../assets/fonts/missing-font.ttf');  /* ❌ Fel - Filen saknas */
+}

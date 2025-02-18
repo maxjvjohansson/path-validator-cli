@@ -15,22 +15,15 @@ export function showResults(invalidPaths) {
 
     console.log(chalk.red(`${invalidPaths.length} invalid paths found:\n`));
 
-    invalidPaths.forEach(({ file, path, issue }) => {
+    invalidPaths.forEach(({ file, path, issue, suggestion, lineNumber }) => {
         const error = errorMessages[issue] || { message: "Unknown error", suggestion: "" };
 
-        if (issue === "missingFile") {
-            console.log(
-                chalk.bgRed.white(`   Missing file: ${path} `) + "\n" +
-                chalk.yellow(`   File referenced in: ${file}\n`) +
-                chalk.cyan(`   Suggestion: "${error.suggestion}"\n`)
-            );
-        } else {
-            console.log(
-                chalk.red(`    Invalid path in ${file}: '${path}'\n`) +
-                chalk.yellow(`      → ${error.message}: "${path}"\n`) +
-                chalk.cyan(`      Suggestion: "${error.suggestion}"\n`)
-            );
-        }
+        console.log(
+            chalk.bgRed.white(`  ${error.message}: `) + chalk.red(`'${path}'\n`) +
+            chalk.yellow(`  ${messages.fileReference}: ${file}\n`) +
+            (lineNumber ? chalk.yellow(`  ${messages.lineReference}: ${lineNumber}\n`) : '') +
+            chalk.cyan(`  ${messages.suggestionLabel}: ${suggestion}\n`)
+        );
     });
 
     console.log(chalk.yellow(messages.validationComplete(invalidPaths.length)));

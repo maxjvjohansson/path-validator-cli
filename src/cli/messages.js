@@ -30,5 +30,8 @@ export const messages = {
     fixingPaths: "🔧 Fixing invalid paths...",
     allFixed: "\n✅ All paths have been fixed!\n",
     noChanges: "\n📌 No changes were made. Exiting.\n",
-    errorOccurred: "❌ An error occurred during validation."
+    errorOccurred: "❌ An error occurred during validation.",
+    fileReference: "File referenced in",
+    lineReference: "Line",
+    suggestionLabel: "Suggestion"
 };

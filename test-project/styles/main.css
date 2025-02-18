@@ -1,0 +1,12 @@
+body {
+    background-image: url("../assets/images/hero.jpg");  /* ✅ Rätt */
+}
+
+@font-face {
+    font-family: 'OpenSans' sans-serif;
+    src: url('../assets/fonts/OpenSans.ttf');  /* ✅ Rätt */
+}
+
+body {
+    font-family: 'OpenSans' sans-serif;
+}

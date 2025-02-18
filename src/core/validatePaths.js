@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { searchPaths } from './searchFiles.js';
 import { parseHTML, parseCSS, parseJS, parsePHP } from '../utils/parsedContent.js';
+import { errorMessages } from '../cli/messages.js';
 
 /**
  * Validate extracted paths to check if they exist in the project or are valid URLs.
@@ -22,6 +23,7 @@ export async function validatePaths(projectRoot) {
 
     for (const file of files) {
         const content = await fs.promises.readFile(file.path, 'utf-8');
+        const lines = content.split('\n'); // Split file content into lines
         const parser = parsers[file.extension];
 
         if (parser) {
@@ -29,54 +31,66 @@ export async function validatePaths(projectRoot) {
 
             extractedPaths.invalidMatches.forEach(pathData => {
                 const importPath = pathData.path;
-                let fullPath = path.resolve(path.dirname(file.path), importPath);
+                const fileDir = path.dirname(file.path); // Reference directory of the file
+                let fullPath = path.resolve(fileDir, importPath);
+                let issueType = null;
+                let dynamicSuggestion = "";
+
+                // Find the line number where the issue occurs
+                const lineNumber = lines.findIndex(line => line.includes(importPath)) + 1;
 
                 // Case 1: Flag absolute paths that may break after deployment
                 if (importPath.startsWith('/')) {
-                    pathData.issue = "absolutePath";
-                    invalidPaths.push({
-                        ...pathData,
-                        suggestion: `Use a relative path instead: ${path.relative(file.path, fullPath)}` // TODO: Fix so that relative path is shown during the message, also maybe include this in messages.js instead?
-                    });
-                    return;
+                    issueType = "absolutePath";
+                    let cleanPath = importPath.replace(/^\/+/, ""); // Remove leading `/`
+                    let targetPath = path.join(projectRoot, cleanPath);
+                    let relativePath = path.relative(fileDir, targetPath); // Calculate from `fileDir` → `targetPath`
+                    
+                    // Fix: Ensure shortest relative path possible
+                    if (relativePath === '') {
+                        relativePath = './'; // Same directory → use `./`
+                    } else if (!relativePath.startsWith('../') && !relativePath.startsWith('./')) {
+                        relativePath = `./${relativePath}`;
+                    } else if (relativePath.startsWith('../../')) {
+                        relativePath = relativePath.replace(/^(\.\.\/)+/, '../'); // Avoid unnecessary deep levels
+                    }
+
+                    dynamicSuggestion = `Try a relative path instead: "${relativePath}"`;
                 }
 
                 // Case 2: Flag if the file does not exist
-                if (!fs.existsSync(fullPath)) {
-                    pathData.issue = "missingFile";
-                    invalidPaths.push({
-                        ...pathData,
-                        suggestion: "Check if the file was moved or renamed manually."
-                    });
-                    return;
+                else if (!fs.existsSync(fullPath)) {
+                    issueType = "missingFile";
+                    dynamicSuggestion = errorMessages[issueType].suggestion;
                 }
 
                 // Case 3: Flag relative paths that escape the project root
-                if (importPath.startsWith('..') && !fullPath.startsWith(projectRoot)) {
-                    pathData.issue = "tooManyBack";
-                    invalidPaths.push({
-                        ...pathData,
-                        suggestion: "Adjust the path to stay within the project root."
-                    });
-                    return;
+                else if (importPath.startsWith('..') && !fullPath.startsWith(projectRoot)) {
+                    issueType = "tooManyBack";
+                    dynamicSuggestion = errorMessages[issueType].suggestion;
                 }
 
                 // Case 4: Incorrect relative paths (e.g., `../` instead of `./`)
-                if (importPath.startsWith("./") || importPath.startsWith("../")) {
-                    pathData.issue = "incorrectRelative";
-                    invalidPaths.push({
-                        ...pathData,
-                        suggestion: "Try './' instead of '../' if the file is in the same folder."
-                    });
-                    return;
+                else if (importPath.startsWith("./") || importPath.startsWith("../")) {
+                    issueType = "incorrectRelative";
+                    dynamicSuggestion = errorMessages[issueType].suggestion;
                 }
 
                 // Case 5: If no known issue type is found, flag as unknown
-                pathData.issue = "unknownPath";
-                invalidPaths.push({
-                    ...pathData,
-                    suggestion: "This path could not be classified. Please check manually."
-                });
+                else {
+                    issueType = "unknownPath";
+                    dynamicSuggestion = errorMessages[issueType].suggestion;
+                }
+
+                // Push the issue with the dynamically built suggestion
+                if (issueType) {
+                    invalidPaths.push({
+                        ...pathData,
+                        issue: issueType,
+                        suggestion: dynamicSuggestion,
+                        lineNumber // Include line number
+                    });
+                }
             });
         }
     }

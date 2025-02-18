@@ -36,7 +36,7 @@ export async function validatePaths(projectRoot) {
                     pathData.issue = "absolutePath";
                     invalidPaths.push({
                         ...pathData,
-                        suggestion: `Use a relative path instead: ${path.relative(file.path, fullPath)}`
+                        suggestion: `Use a relative path instead: ${path.relative(file.path, fullPath)}` // TODO: Fix so that relative path is shown during the message, also maybe include this in messages.js instead?
                     });
                     return;
                 }

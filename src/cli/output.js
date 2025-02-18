@@ -13,22 +13,24 @@ export function showResults(invalidPaths) {
         return;
     }
 
-    console.log(chalk.red(`${invalidPaths.length} invalid paths found:\n`));
+    console.log(chalk.hex('#CC0000').bold(`                                 ${invalidPaths.length} INVALID PATHS FOUND:\n`));
 
     invalidPaths.forEach(({ file, path, issue }) => {
         const error = errorMessages[issue] || { message: "Unknown error", suggestion: "" };
 
         if (issue === "missingFile") {
             console.log(
-                chalk.bgRed.white(`   Missing file: ${path} `) + "\n" +
-                chalk.yellow(`   File referenced in: ${file}\n`) +
-                chalk.cyan(`   Suggestion: "${error.suggestion}"\n`)
+                `${chalk.bgRed.white('   MISSING FILE:   ')}        ${chalk.white(path)}\n\n` +
+                `${chalk.yellow('   File referenced in:')}     ${chalk.white(file)}\n\n` +
+                `${chalk.hex('#3AAFA9')('   Suggestion:')}             ${chalk.white(`"${error.suggestion}"`)}'\n\n` +
+                chalk.gray('--------------------------------------------------------------------------------\n')
             );
         } else {
             console.log(
-                chalk.red(`    Invalid path in ${file}: '${path}'\n`) +
-                chalk.yellow(`      → ${error.message}: "${path}"\n`) +
-                chalk.cyan(`      Suggestion: "${error.suggestion}"\n`)
+                `${chalk.red('   Invalid path in:')}          ${chalk.white(`${file}: '${path}'`)}\n\n` +
+                `${chalk.yellow('   Error:')}                   ${chalk.white(`${error.message}: "${path}"`)}'\n\n` +
+                `${chalk.cyan('   Suggestion:')}              ${chalk.white(`"${error.suggestion}"`)}'\n\n` +
+                chalk.gray('--------------------------------------------------------------------------------\n')
             );
         }
     });

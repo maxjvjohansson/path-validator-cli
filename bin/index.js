@@ -38,12 +38,13 @@ program
             if (invalidPaths.length > 0) {
                 const shouldFix = await askForAutoCorrect();
                 if (shouldFix) {
-                    showFixingMessage();
+                    showFixingMessage(); 
                     const result = await fixPaths(projectRoot);
+
                     if (result.fixed > 0) {                     
                         showAllFixedMessage();
                     } else {
-                        showNoChangesMessage();
+                        showNoChangesMessage(); // Log this if no corrections were made
                     }
                 } else {
                     showNoChangesMessage();

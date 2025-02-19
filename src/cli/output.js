@@ -13,16 +13,20 @@ export function showResults(invalidPaths) {
         return;
     }
 
-    console.log(chalk.red(`${invalidPaths.length} invalid paths found:\n`));
+    console.log(
+        chalk.red(`                           ${invalidPaths.length} invalid paths found:\n`) +
+        chalk.gray('--------------------------------------------------------------------------------\n')
+    );
 
     invalidPaths.forEach(({ file, path, issue, suggestion, lineNumber }) => {
         const error = errorMessages[issue] || { message: "Unknown error", suggestion: "" };
-
+    
         console.log(
-            chalk.bgRed.white(`  ${error.message}: `) + chalk.red(`'${path}'\n`) +
-            chalk.yellow(`  ${messages.fileReference}: ${file}\n`) +
-            (lineNumber ? chalk.yellow(`  ${messages.lineReference}: ${lineNumber}\n`) : '') +
-            chalk.cyan(`  ${messages.suggestionLabel}: ${suggestion}\n`)
+            `${chalk.bgRed.white('   Invalid Path:  ')}        ${chalk.white(`'${path}'`)}\n\n` +
+            `${chalk.yellow('   File Referenced In:')}    ${chalk.white(file)}\n\n` +
+            (lineNumber ? `${chalk.yellow('   Line Number:')}           ${chalk.white(lineNumber)}\n\n` : '') +
+            `${chalk.hex('#3AAFA9')('   Suggestion:')}           ${chalk.white(` "${suggestion}"`)}\n\n` +
+            chalk.gray('--------------------------------------------------------------------------------\n')
         );
     });
 

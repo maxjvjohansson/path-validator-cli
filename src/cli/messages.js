@@ -1,11 +1,14 @@
 export const errorMessages = {
     absolutePath: {
         message: "Path is absolute",
-        suggestion: "Try a relative path instead.",
+        suggestion: (correctPath) => `Try a relative path instead: "${correctPath}"`,
     },
     missingFile: {
         message: "File does not exist",
-        suggestion: "Check if the file was moved or renamed manually.",
+        suggestion: (correctPath = null) => 
+            correctPath 
+                ? `File not found in expected location. Did you mean: "${correctPath}"?`
+                : "Check if the file was moved or renamed manually.",
     },
     tooManyBack: {
         message: "Path goes too far back in the directory",

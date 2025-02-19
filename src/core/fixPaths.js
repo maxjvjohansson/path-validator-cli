@@ -3,6 +3,7 @@ import path from 'path';
 import { searchPaths } from './searchFiles.js';
 import { validatePaths } from './validatePaths.js';
 import chalk from 'chalk';
+import figlet from 'figlet';
 
 /**
  * Fixes invalid file paths by converting absolute to relative and correcting broken references.
@@ -71,7 +72,20 @@ export async function fixPaths(projectRoot) {
     }
 
     console.log('\n✅ Path correction complete!');
+
+    const successMessage = await new Promise((resolve) => {
+        figlet.text('COMPLETE', {
+            font: 'Isometric4',
+            horizontalLayout: 'default',
+            verticalLayout: 'default'
+        }, (err, data) => {
+            resolve(err ? 'COMPLETE' : data);
+        });
+    });
+    
+    console.log('\n' + chalk.white(successMessage));
 }
+
 
 /**
  * Tries to find a correct file path based on known project files.
@@ -118,3 +132,4 @@ export function correctPath(filePath, projectRoot) {
     }
     return filePath;
 }
+

@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { searchPaths } from './searchFiles.js';
 import { validatePaths } from './validatePaths.js';
+import chalk from 'chalk';
 
 /**
  * Fixes invalid file paths by converting absolute to relative and correcting broken references.
@@ -9,7 +10,7 @@ import { validatePaths } from './validatePaths.js';
  * @returns {Promise<void>}
  */
 export async function fixPaths(projectRoot) {
-    console.log('🔍 Running auto-correction for invalid paths...');
+    console.log('🔍 Running auto-correction for invalid paths...\n');
 
     // 1️⃣ Get all invalid paths
     const { invalidPaths } = await validatePaths(projectRoot);
@@ -31,10 +32,9 @@ export async function fixPaths(projectRoot) {
 
         // 🛑 Skip fixing missing files and unknown paths
         if (pathData.issue === "missingFile" || pathData.issue === "unknownPath") {
-            console.log(`❌ Cannot fix: ${pathData.path} (Manual fix required)`);
+            console.log(`❌ Cannot fix ${chalk.red('(Manual fix required)')}: ${pathData.path}''`);
             continue;
         }
-
         // 🟢 Case 1: Convert absolute paths to the shortest possible relative path
         if (pathData.issue === "absolutePath") {
             let cleanPath = pathData.path.replace(/^\/+/, ""); // Remove leading `/`
@@ -70,7 +70,7 @@ export async function fixPaths(projectRoot) {
         }
     }
 
-    console.log('✅ Path correction complete!');
+    console.log('\n✅ Path correction complete!');
 }
 
 /**

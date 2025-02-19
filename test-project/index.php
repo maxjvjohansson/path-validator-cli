@@ -18,7 +18,7 @@ include 'missing-file.php'; // ❌ Fel - Men vi vill testa att den flaggas
 
     <h1>Welcome to Our Test Page</h1>
 
-    <img src="assets/images/logo.png" alt="Logo"> <!-- ✅ Rätt -->
+    <img sr="assets/images/logo.png" alt="Logo"> <!-- ✅ Rätt -->
     <img src="assets/images/hero.jpg" alt="Hero"> <!-- ✅ Rätt -->
 
     <script src="scripts/app.js"></script> <!-- ✅ Rätt -->

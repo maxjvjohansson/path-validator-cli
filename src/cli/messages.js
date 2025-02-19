@@ -25,12 +25,14 @@ export const errorMessages = {
 };
 
 export const messages = {
-    // Validation messages
-    validationStart: "🔍 Running path validation...\n",
+    validationStart: "\n🔍 Running path validation...\n",
     validationComplete: (count) =>
         count > 0
             ? `\n📌 ${count} issues found. Run 'path-validator' without '--check-only' to fix them.`
             : "\n✅ No issues found. Your paths are clean!\n",
+    fixingPaths: "\n🔧 Fixing invalid paths...\n",
+    allFixed: "\n✅ All paths have been fixed!\n",
+    noChanges: "\n📌 No changes were made. Exiting.\n",
     errorOccurred: "❌ An error occurred during validation.",
     
     // Fixing messages

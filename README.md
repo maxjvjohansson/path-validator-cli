@@ -1,5 +1,4 @@
 
-<img src="file:///Users/jskepp/Downloads/path-validator-logo.svg" width="200" height="200" alt="Alt text">
 
 # Path Validator CLI Tool
 
@@ -24,7 +23,7 @@ A command-line tool for validating and fixing path naming conventions across you
 ## Installation
 
 ```bash
-npm install -g path-validator
+npm install -g path-validator-cli
 ```
 
 ## Usage

@@ -73,32 +73,8 @@ You can customize these rules by creating a `.pathvalidatorrc` file in your proj
 
 The tool provides detailed feedback about invalid paths found in your codebase:
 
-```
-Running path validation...
-================================================================================
-                           3 INVALID PATHS FOUND:
-================================================================================
-   Invalid Path:          '../src/core/fix.js'
-   File Referenced In:    /Users/jskepp/Documents/GitHub/path-validator-cli/test/testFix.js
-   Line Number:           2
-   Suggestion:            "Check if the file was moved or renamed manually."
---------------------------------------------------------------------------------
-   Invalid Path:          '../src/utils/parser.js'
-   File Referenced In:    /Users/jskepp/Documents/GitHub/path-validator-cli/test/testParser.js
-   Line Number:           4
-   Suggestion:            "Check if the file was moved or renamed manually."
---------------------------------------------------------------------------------
-   Invalid Path:          '../src/utils/regex.js'
-   File Referenced In:    /Users/jskepp/Documents/GitHub/path-validator-cli/test/testParser.js
-   Line Number:           5
-   Suggestion:            "Check if the file was moved or renamed manually."
---------------------------------------------------------------------------------
-  
- 3 ISSUES FOUND.
-================================================================================
- 😔Yikes! Not the worst, but definitely not great. You *do* know how paths work, right?😔
-================================================================================
-```
+![image](https://github.com/user-attachments/assets/c705afd8-53fb-4914-af9e-53a0e442637e)
+
 
 Each issue shows:
 - The invalid path that was found

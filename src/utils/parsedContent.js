@@ -65,7 +65,41 @@ export function parseJS(content, filePath, projectRoot) {
 // Parses PHP content and extracts paths.
 //---------------------------------------
 export function parsePHP(content, filePath, projectRoot) {
-    return parseWithRegex(content, filePath, phpRegex, 'PHP', projectRoot);
+    const { validMatches, invalidMatches } = parseWithRegex(content, filePath, phpRegex, 'PHP', projectRoot);
+
+    // Parse HTML inside PHP files
+    const { validMatches: htmlValid, invalidMatches: htmlInvalid } = parseWithRegex(content, filePath, htmlRegex, 'HTML', projectRoot);
+
+    // Extract and parse inline CSS
+    const inlineCSS = extractInlineCode(content, 'style');
+    let cssValid = [], cssInvalid = [];
+    if (inlineCSS.trim()) {
+        ({ validMatches: cssValid, invalidMatches: cssInvalid } = parseWithRegex(inlineCSS, filePath, cssRegex, 'CSS', projectRoot));
+    }
+
+    // Extract and parse inline JS
+    const inlineJS = extractInlineCode(content, 'script');
+    let jsValid = [], jsInvalid = [];
+    if (inlineJS.trim()) {
+        ({ validMatches: jsValid, invalidMatches: jsInvalid } = parseWithRegex(inlineJS, filePath, jsRegex, 'JavaScript', projectRoot));
+    }
+
+    // Filter out duplicate matches (same path in same file)
+    const uniqueInvalidPaths = [];
+    const seenPaths = new Set();
+
+    for (const pathData of [...invalidMatches, ...htmlInvalid, ...cssInvalid, ...jsInvalid]) {
+        const key = `${filePath}:${pathData.path}`;
+        if (!seenPaths.has(key)) {
+            seenPaths.add(key);
+            uniqueInvalidPaths.push(pathData);
+        }
+    }
+
+    return {
+        validMatches: [...validMatches, ...htmlValid, ...cssValid, ...jsValid],
+        invalidMatches: uniqueInvalidPaths // Returns only unique invalid paths
+    };
 }
 
 // Function to parse content with given regex patterns
@@ -112,27 +146,35 @@ export function determinePathType(filePath) {
 }
 
 // Function to check if a path is potentially invalid based on certain criteria
-export function isPotentiallyInvalid(filePath, type, baseFile , projectRoot) {
-    if (!baseFile) return true; // If baseFile is missing, we can't validate
-    if (!projectRoot) return true; // If projectRoot is missing, we can't validate
+export function isPotentiallyInvalid(filePath, type, baseFile, projectRoot) {
+    if (!baseFile || !projectRoot) return true; // Cannot validate if baseFile or projectRoot is missing
+    
     if (type === 'URL') {
         return !isValidURL(filePath); // Check if URL is valid
     }
 
+    const absolutePath = path.resolve(path.dirname(baseFile), filePath);
+    
     if (type === 'relative') {
-        const absolutePath = path.resolve(path.dirname(baseFile), filePath);
-        
-        if (!fs.existsSync(absolutePath)) return true; // Check if file exists
-        if (!absolutePath.startsWith(projectRoot)) return true; // Prevent path from extending project root
-        if (filePath.includes('//')) return true; // Unnecessary use of "//"
-        if (filePath.includes('././')) return true; // Unnecessary use of "./"
+        // If the resolved path exists, it is NOT invalid
+        if (fs.existsSync(absolutePath)) return false;
+
+        // Prevent paths that escape the project root
+        if (!absolutePath.startsWith(projectRoot)) return true;
+
+        // Prevent unnecessary "//" or "././"
+        if (filePath.includes('//') || filePath.includes('././')) return true;
+
+        // Allow correctly formed relative paths
+        if (!filePath.startsWith('../')) return false;
     }
 
     if (type === 'absolute') {
-        if (!fs.existsSync(filePath)) return true; // Absolute path must point to an actual file
+        // Absolute paths must exist
+        if (!fs.existsSync(filePath)) return true;
     }
 
-    return false; // Else, path is valid
+    return false; // Otherwise, the path is valid
 }
 
 // Function to validate if a given URL is correctly formatted
@@ -143,4 +185,16 @@ function isValidURL(url) {
     } catch {
         return false;
     }
+}
+
+function extractInlineCode(content, tag) {
+    const regex = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi');
+    let extractedCode = '';
+
+    let match;
+    while ((match = regex.exec(content)) !== null) {
+        extractedCode += match[1] + '\n';
+    }
+
+    return extractedCode;
 }

@@ -1,27 +1,19 @@
-<?php
-include 'includes/header.php'; // ✅ Rätt - Relativ path
-include 'includes/footer.php'; // ✅ Rätt - Fixat felet
-include 'missing-file.php'; // ❌ Fel - Men vi vill testa att den flaggas
+<?php include './includes/header.php'; ?> <!-- ❌ Absolut sökväg -->
 
-?>
+<main>
+    <h1>Welcome to Our Test Landing Page</h1>
+    <img src="/assets/images/banner.jpg" alt="Banner Image"> <!-- ❌ Absolut sökväg -->
+    <p>This page is designed to test broken paths in our validator tool.</p>
 
-<!DOCTYPE html>
-<html lang="en">
+    <form action="/form-handler.php" method="POST"> <!-- ❌ Absolut sökväg -->
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name">
 
-<head>
-    <title>Test Landing Page</title>
-    <link rel="stylesheet" href="styles/main.css"> <!-- ✅ Rätt -->
-    <link rel="stylesheet" href="styles/theme.css"> <!-- ✅ Rätt -->
-</head>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
 
-<body>
+        <button type="submit">Submit</button>
+    </form>
+</main>
 
-    <h1>Welcome to Our Test Page</h1>
-
-    <img sr="assets/images/logo.png" alt="Logo"> <!-- ✅ Rätt -->
-    <img src="assets/images/hero.jpg" alt="Hero"> <!-- ✅ Rätt -->
-
-    <script src="scripts/app.js"></script> <!-- ✅ Rätt -->
-</body>
-
-</html>
+<?php include './includes/footer.php'; ?> <!-- ❌ Absolut sökväg -->

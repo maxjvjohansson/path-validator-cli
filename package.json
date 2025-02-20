@@ -4,7 +4,7 @@
   "description": "A CLI tool to validate and fix broken paths in a project. Prevent deployment issues by validating and correcting paths directly in your codebase.",
   "type": "module",
   "bin": {
-    "path-validator": "./bin/index.js"
+    "path-validator": "bin/index.js"
   },
   "scripts": {
     "start": "node bin/index.js",

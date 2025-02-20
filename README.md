@@ -15,7 +15,8 @@ A command-line tool for validating and fixing path naming conventions across you
   - Platform-specific path incompatibilities
 - 🛠️ Automatically fixes detected issues (when not using --check-only)
 - 📋 Generates detailed reports of found issues
-- ⚡ Fast and lightweight
+- ⚡ Fast and lightweight![Uploading path-validator-logo.svg…]()
+
 
 
 ## Installation
@@ -73,6 +74,7 @@ The tool provides detailed feedback about invalid paths found in your codebase:
 
 <img src="https://github.com/user-attachments/assets/c705afd8-53fb-4914-af9e-53a0e442637e" width="500" alt="Path Validator Output Example 1">
 <img src="https://github.com/user-attachments/assets/5dbe459c-3900-4ade-8989-4285b9f3bf12" width="500" alt="Path Validator Output Example 2">
+<img src="file:///Users/jskepp/Downloads/path-validator-logo.svg">
 
 
 

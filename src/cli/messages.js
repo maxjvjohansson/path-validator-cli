@@ -26,10 +26,21 @@ export const errorMessages = {
 
 export const messages = {
     validationStart: "\n🔍 Running path validation...\n",
-    validationComplete: (count) =>
-        count > 0
+    validationComplete: (count) => {
+        let message = count > 0
             ? `\n📌 ${count} issues found. Run 'path-validator' without '--check-only' to fix them.`
-            : "\n✅ No issues found. Your paths are clean!\n",
+            : "\n✅ No issues found. Your paths are clean!\n";
+
+            if (count >= 7) {
+                message += "\n🚨 Oof... this is bad. Your paths are a total mess. Maybe time to rethink your approach?\n";
+            } else if (count >= 4) {
+                message += "\n⚠️ Yikes! Not the worst, but definitely not great. You *do* know how paths work, right?\n";
+            } else if (count > 0) {
+                message += "\n🤨 Hm... a few minor mistakes. Almost like someone wasn't paying attention.\n";
+            }
+    
+            return message;
+        },
     fixingPaths: "\n🔧 Fixing invalid paths...\n",
     allFixed: "\n✅ All paths have been fixed!\n",
     noChanges: "\n📌 No changes were made. Exiting.\n",

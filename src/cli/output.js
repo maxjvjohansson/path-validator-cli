@@ -14,8 +14,9 @@ export function showResults(invalidPaths) {
     }
 
     console.log(
-        chalk.red(`                           ${invalidPaths.length} invalid paths found:\n`) +
-        chalk.gray('--------------------------------------------------------------------------------\n')
+        chalk.gray('\n================================================================================\n'),
+        chalk.red(`\n                           ${invalidPaths.length} INVALID PATHS FOUND:\n`) +
+        chalk.gray('\n================================================================================\n')
     );
 
     invalidPaths.forEach(({ file, path, issue, suggestion, lineNumber }) => {

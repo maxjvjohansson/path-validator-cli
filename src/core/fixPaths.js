@@ -51,7 +51,7 @@ export async function fixPaths(projectRoot) {
 
         // Apply fix
         if (newPath) {
-            console.log(chalk.green(messages.fixingPath(pathData.path, newPath)));
+            console.log(chalk.hex('#3AAFA9')(messages.fixingPath(pathData.path, newPath)));
             await replacePathInFile(pathData.file, pathData.path, newPath);
             fixedCount++;
         } else {
@@ -86,6 +86,6 @@ async function replacePathInFile(filePath, oldPath, newPath) {
         const updatedContent = fileContent.replace(oldPath, newPath);
         await fs.promises.writeFile(filePath, updatedContent);
     } catch (error) {
-        console.error(chalk.red(`❌ Failed to update file: ${filePath}`));
+        console.error(chalk.red(`Failed to update file: ${filePath}`));
     }
 }

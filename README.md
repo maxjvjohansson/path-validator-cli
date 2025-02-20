@@ -73,8 +73,8 @@ You can customize these rules by creating a `.pathvalidatorrc` file in your proj
 
 The tool provides detailed feedback about invalid paths found in your codebase:
 
-![image](https://github.com/user-attachments/assets/c705afd8-53fb-4914-af9e-53a0e442637e)
-![image](https://github.com/user-attachments/assets/5dbe459c-3900-4ade-8989-4285b9f3bf12)
+![image](https://github.com/user-attachments/assets/c705afd8-53fb-4914-af9e-53a0e442637e=250x250)
+![image](https://github.com/user-attachments/assets/5dbe459c-3900-4ade-8989-4285b9f3bf12=250x250)
 
 
 

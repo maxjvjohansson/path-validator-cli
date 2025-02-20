@@ -67,38 +67,58 @@ export function parseJS(content, filePath, projectRoot) {
 export function parsePHP(content, filePath, projectRoot) {
     const { validMatches, invalidMatches } = parseWithRegex(content, filePath, phpRegex, 'PHP', projectRoot);
 
-    // Parse HTML inside PHP files
+    // Parse normal HTML inside PHP files
     const { validMatches: htmlValid, invalidMatches: htmlInvalid } = parseWithRegex(content, filePath, htmlRegex, 'HTML', projectRoot);
 
-    // Extract and parse inline CSS
+    // Extract PHP-echoed raw paths
+    const echoedPathMatches = [...content.matchAll(phpRegex.echoedPath)];
+    let echoedPaths = [];
+
+    echoedPathMatches.forEach(match => {
+        echoedPaths.push({
+            path: match[1],
+            file: filePath,
+            type: determinePathType(match[1]), // Absolute, relative, URL
+            matchType: 'echoedPath',
+            fileType: 'PHP'
+        });
+    });
+
+    // Filter echoed paths: Only flag if they are absolute and incorrect
+    const echoedPathInvalid = echoedPaths.filter(pathData => {
+        return isPotentiallyInvalid(pathData.path, pathData.type, filePath, projectRoot);
+    });
+
+    // Parse inline CSS inside `<style>` blocks within PHP
     const inlineCSS = extractInlineCode(content, 'style');
     let cssValid = [], cssInvalid = [];
     if (inlineCSS.trim()) {
         ({ validMatches: cssValid, invalidMatches: cssInvalid } = parseWithRegex(inlineCSS, filePath, cssRegex, 'CSS', projectRoot));
     }
 
-    // Extract and parse inline JS
+    // Parse inline JavaScript inside `<script>` blocks within PHP
     const inlineJS = extractInlineCode(content, 'script');
     let jsValid = [], jsInvalid = [];
     if (inlineJS.trim()) {
         ({ validMatches: jsValid, invalidMatches: jsInvalid } = parseWithRegex(inlineJS, filePath, jsRegex, 'JavaScript', projectRoot));
     }
 
-    // Filter out duplicate matches (same path in same file)
-    const uniqueInvalidPaths = [];
+    // INLINE DEDUPLICATION TO REMOVE DUPLICATES
+    const allInvalid = [...invalidMatches, ...htmlInvalid, ...echoedPathInvalid, ...cssInvalid, ...jsInvalid];
     const seenPaths = new Set();
+    const uniqueInvalidPaths = [];
 
-    for (const pathData of [...invalidMatches, ...htmlInvalid, ...cssInvalid, ...jsInvalid]) {
-        const key = `${filePath}:${pathData.path}`;
+    allInvalid.forEach(pathData => {
+        const key = `${pathData.file}:${pathData.path}`;
         if (!seenPaths.has(key)) {
             seenPaths.add(key);
             uniqueInvalidPaths.push(pathData);
         }
-    }
+    });
 
     return {
         validMatches: [...validMatches, ...htmlValid, ...cssValid, ...jsValid],
-        invalidMatches: uniqueInvalidPaths // Returns only unique invalid paths
+        invalidMatches: uniqueInvalidPaths
     };
 }
 

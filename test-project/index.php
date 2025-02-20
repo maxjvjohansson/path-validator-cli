@@ -10,7 +10,7 @@
     </style>
 
     <h1>Welcome to Our Test Landing Page</h1>
-    <img src="assets/images/banner.jpg" alt="Banner Image"> <!-- ❌ Absolut sökväg -->
+    <img src="<?= "./assets/images/logo.png"; ?>"> <!-- ❌ Absolut sökväg -->
     <p>This page is designed to test broken paths in our validator tool.</p>
 
     <form action="./form-handler.php" method="POST"> <!-- ❌ Absolut sökväg -->

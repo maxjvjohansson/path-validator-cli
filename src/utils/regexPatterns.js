@@ -62,7 +62,8 @@ export const phpRegex = {
     readfile: /readfile\s*\(\s*['"]([^'"]+)['"]\s*\)/gi,
     fopen: /fopen\s*\(\s*['"]([^'"]+)['"]\s*,\s*['"][^'"]+['"]\s*\)/gi,
     opendir: /opendir\s*\(\s*['"]([^'"]+)['"]\s*\)/gi,
-    moveUploadedFile: /move_uploaded_file\s*\(\s*['"]([^'"]+)['"]\s*,\s*['"][^'"]+['"]\s*\)/gi
-
+    moveUploadedFile: /move_uploaded_file\s*\(\s*['"]([^'"]+)['"]\s*,\s*['"][^'"]+['"]\s*\)/gi,
+    echoedHTML: /echo\s+['"]([^'"]*(?:src|href|action|data|poster|manifest)=['"]([^'"]+)['"][^'"]*)['"];/gi,
+    echoedPath: /(?:echo|<\?=)\s*['"]([^'"]+?)['"]\s*;?\s*\?>/gi
 };
 

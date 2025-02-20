@@ -3,7 +3,7 @@ import { messages, errorMessages } from './messages.js';
 
 // Loader animation for search
 export function showSearchingMessage() {
-    console.log(chalk.blue(messages.validationStart));
+    console.log(chalk.hex('#3AAFA9')(messages.validationStart));
 }
 
 // Show result from validation

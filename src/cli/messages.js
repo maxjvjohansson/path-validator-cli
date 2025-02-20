@@ -29,8 +29,8 @@ export const messages = {
     validationComplete: (count, isCheckOnly = false) => {
         let message = count > 0
             ? isCheckOnly 
-                ? `\n ${count} issues found. Run 'path-validator' without '--check-only' to fix them.\n`
-                : `\n ${count} issues found.\n`
+                ? `\n ${count} ISSUES FOUND. Run 'path-validator' without '--check-only' to fix them.\n`
+                : `\n ${count} ISSUES FOUND.\n`
             : "\n🤯 No issues found. Your paths are clean!🤯\n";
 
         if (count >= 7) {
@@ -57,7 +57,7 @@ export const messages = {
     // Fixing messages
     fixingPathsStart: "🔧 Fixing invalid paths...",
     fixingPath: (oldPath, newPath) => `🔧 Fixing ${oldPath} → ${newPath}`,
-    cannotFix: (path) => `Cannot fix: 🔧 👷(Manual fix required)  ${path} `,
+    cannotFix: (path) => `Cannot fix: 🔧 👷(Manual fix required) ---> ${path} `,
     fixComplete: "✅ Path correction complete!",
     noInvalidPaths: "✅ No invalid paths found!",
     foundInvalidPaths: (count) => `🔎 Found ${count} invalid paths. Attempting to fix...\n`,

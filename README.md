@@ -7,7 +7,8 @@ A command-line tool for validating and fixing path naming conventions across you
 
 ## Features
 
-- ✅ Validates file and directory names against common naming conventions
+- ✅ Validates file and directory names against common naming conventions.
+- Support for HTML, CSS, PHP, and JavaScript projects.
 - 🔍 Detects issues like:
   - Spaces in filenames
   - Special characters
@@ -17,6 +18,7 @@ A command-line tool for validating and fixing path naming conventions across you
 - 🛠️ Automatically fixes detected issues (when not using --check-only)
 - 📋 Generates detailed reports of found issues
 - ⚡ Fast and lightweight
+
 
 ## Installation
 
@@ -55,11 +57,6 @@ path-validator
 # Only check paths without making changes
 path-validator --check-only
 
-# Validate a specific directory
-path-validator /path/to/directory
-
-# Check a specific directory without fixes
-path-validator /path/to/directory --check-only
 ```
 
 ## Configuration
@@ -79,7 +76,7 @@ The tool provides detailed feedback about invalid paths found in your codebase:
 ```
 Running path validation...
 ================================================================================
-                           5 INVALID PATHS FOUND:
+                           3 INVALID PATHS FOUND:
 ================================================================================
    Invalid Path:          '../src/core/fix.js'
    File Referenced In:    /Users/jskepp/Documents/GitHub/path-validator-cli/test/testFix.js
@@ -96,17 +93,8 @@ Running path validation...
    Line Number:           5
    Suggestion:            "Check if the file was moved or renamed manually."
 --------------------------------------------------------------------------------
-   Invalid Path:          './scripts/module.js'
-   File Referenced In:    /Users/jskepp/Documents/GitHub/path-validator-cli/test/testParser.js
-   Line Number:           38
-   Suggestion:            "Check if the file was moved or renamed manually."
---------------------------------------------------------------------------------
-   Invalid Path:          '../src/utils/regex.js'
-   File Referenced In:    /Users/jskepp/Documents/GitHub/path-validator-cli/test/testRegex.js
-   Line Number:           2
-   Suggestion:            "Check if the file was moved or renamed manually."
---------------------------------------------------------------------------------
- 5 ISSUES FOUND.
+  
+ 3 ISSUES FOUND.
 ================================================================================
  😔Yikes! Not the worst, but definitely not great. You *do* know how paths work, right?😔
 ================================================================================
@@ -118,10 +106,6 @@ Each issue shows:
 - The exact line number where the reference occurs
 - A helpful suggestion for fixing the issue
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -132,14 +116,14 @@ If you encounter any issues or have questions, please file an issue on the GitHu
 
 ## Roadmap
 
-- [ ] Add support for custom naming patterns
 - [ ] Implement recursive mode for nested directories
 - [ ] Add ignore patterns support
-- [ ] Create configuration file generator
+- [ ] Support for other programming languages like C#
 
 ## Authors
 
-- Your Name - *Initial work* - [YourGithub](https://github.com/yourusername)
+- Max Johansson - [YourGithub](https://github.com/maxjvjohansson)
+- Jesper Skeppstedt - [YourGithub](https://github.com/Skjesper)
 
 ## Acknowledgments
 

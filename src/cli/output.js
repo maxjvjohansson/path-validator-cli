@@ -8,7 +8,7 @@ export function showSearchingMessage() {
 
 // Show result from validation
 export const showResults = (invalidPaths, isCheckOnly) => {
-    console.log(chalk.yellow(messages.validationComplete(invalidPaths.length, isCheckOnly)));
+    
     
     if (invalidPaths.length > 0) {
         console.log(chalk.gray('\n================================================================================\n'));

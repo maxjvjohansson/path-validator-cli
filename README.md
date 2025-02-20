@@ -105,6 +105,7 @@ Each issue shows:
 - The file where this path is referenced
 - The exact line number where the reference occurs
 - A helpful suggestion for fixing the issue
+- ..and a passive aggressive reality check based on how many issues there are. 
 
 ## License
 

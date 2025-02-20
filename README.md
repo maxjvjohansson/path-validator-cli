@@ -122,8 +122,8 @@ If you encounter any issues or have questions, please file an issue on the GitHu
 
 ## Authors
 
-- Max Johansson - [YourGithub](https://github.com/maxjvjohansson)
-- Jesper Skeppstedt - [YourGithub](https://github.com/Skjesper)
+- Max Johansson - [maxjvjohansson](https://github.com/maxjvjohansson)
+- Jesper Skeppstedt - [Skjesper](https://github.com/Skjesper)
 
 ## Acknowledgments
 

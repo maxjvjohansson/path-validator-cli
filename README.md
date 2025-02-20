@@ -74,20 +74,49 @@ You can customize these rules by creating a `.pathvalidatorrc` file in your proj
 
 ## Output
 
-The tool provides clear feedback about what it's doing:
+The tool provides detailed feedback about invalid paths found in your codebase:
 
 ```
-Scanning: /your/project/directory
-Found 3 issues:
-  ✗ "My File.txt" contains spaces
-  ✗ "специальный.doc" contains special characters
-  ✗ "MYFILE.txt" case conflicts with "myfile.txt"
-
-Fixed 3 issues:
-  ✓ "My File.txt" → "my-file.txt"
-  ✓ "специальный.doc" → "special.doc"
-  ✓ "MYFILE.txt" → "myfile-2.txt"
+Running path validation...
+================================================================================
+                           5 INVALID PATHS FOUND:
+================================================================================
+   Invalid Path:          '../src/core/fix.js'
+   File Referenced In:    /Users/jskepp/Documents/GitHub/path-validator-cli/test/testFix.js
+   Line Number:           2
+   Suggestion:            "Check if the file was moved or renamed manually."
+--------------------------------------------------------------------------------
+   Invalid Path:          '../src/utils/parser.js'
+   File Referenced In:    /Users/jskepp/Documents/GitHub/path-validator-cli/test/testParser.js
+   Line Number:           4
+   Suggestion:            "Check if the file was moved or renamed manually."
+--------------------------------------------------------------------------------
+   Invalid Path:          '../src/utils/regex.js'
+   File Referenced In:    /Users/jskepp/Documents/GitHub/path-validator-cli/test/testParser.js
+   Line Number:           5
+   Suggestion:            "Check if the file was moved or renamed manually."
+--------------------------------------------------------------------------------
+   Invalid Path:          './scripts/module.js'
+   File Referenced In:    /Users/jskepp/Documents/GitHub/path-validator-cli/test/testParser.js
+   Line Number:           38
+   Suggestion:            "Check if the file was moved or renamed manually."
+--------------------------------------------------------------------------------
+   Invalid Path:          '../src/utils/regex.js'
+   File Referenced In:    /Users/jskepp/Documents/GitHub/path-validator-cli/test/testRegex.js
+   Line Number:           2
+   Suggestion:            "Check if the file was moved or renamed manually."
+--------------------------------------------------------------------------------
+ 5 ISSUES FOUND.
+================================================================================
+ 😔Yikes! Not the worst, but definitely not great. You *do* know how paths work, right?😔
+================================================================================
 ```
+
+Each issue shows:
+- The invalid path that was found
+- The file where this path is referenced
+- The exact line number where the reference occurs
+- A helpful suggestion for fixing the issue
 
 ## Contributing
 

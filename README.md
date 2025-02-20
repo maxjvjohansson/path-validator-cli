@@ -15,7 +15,7 @@ A command-line tool for validating and fixing path naming conventions across you
   - Platform-specific path incompatibilities
 - 🛠️ Automatically fixes detected issues (when not using --check-only)
 - 📋 Generates detailed reports of found issues
-- ⚡ Fast and lightweight![Uploading path-validator-logo.svg…]()
+- ⚡ Fast and lightweight
 
 
 

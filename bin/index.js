@@ -31,7 +31,7 @@ program
             const { invalidPaths } = await validatePaths(projectRoot);
             
             spinner.stop();
-            showResults(invalidPaths);
+            showResults(invalidPaths, options.checkOnly);
             
             if (options.checkOnly) return;
             

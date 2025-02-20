@@ -3,21 +3,19 @@ import { messages, errorMessages } from './messages.js';
 
 // Loader animation for search
 export function showSearchingMessage() {
-    console.log(chalk.blue(messages.validationStart));
+    console.log(chalk.hex('#3AAFA9')(messages.validationStart));
 }
 
 // Show result from validation
-export function showResults(invalidPaths) {
-    if (invalidPaths.length === 0) {
-        console.log(chalk.green(messages.validationComplete(0)));
-        return;
+export const showResults = (invalidPaths, isCheckOnly) => {
+    console.log(chalk.yellow(messages.validationComplete(invalidPaths.length, isCheckOnly)));
+    
+    if (invalidPaths.length > 0) {
+        console.log(chalk.gray('\n================================================================================\n'));
+        console.log(chalk.red(`\n                           ${invalidPaths.length} INVALID PATHS FOUND:\n`));
+        console.log(chalk.gray('\n================================================================================\n'));
+        
     }
-
-    console.log(
-        chalk.gray('\n================================================================================\n'),
-        chalk.red(`\n                           ${invalidPaths.length} INVALID PATHS FOUND:\n`) +
-        chalk.gray('\n================================================================================\n')
-    );
 
     invalidPaths.forEach(({ file, path, issue, suggestion, lineNumber }) => {
         const error = errorMessages[issue] || { message: "Unknown error", suggestion: "" };
@@ -31,7 +29,7 @@ export function showResults(invalidPaths) {
         );
     });
 
-    console.log(chalk.yellow(messages.validationComplete(invalidPaths.length)));
+    console.log(chalk.yellow(messages.validationComplete(invalidPaths.length, isCheckOnly)));
 }
 
 // Show message if error is present
@@ -42,15 +40,15 @@ export function showErrorMessage(error) {
 
 // Loader animation message
 export function showFixingMessage() {
-    console.log(chalk.blue(messages.fixingPaths));
+    console.log(chalk.hex('#3AAFA9')(messages.fixingPaths));
 }
 
 // Message when all paths are fixed
 export function showAllFixedMessage() {
-    console.log(chalk.green(messages.allFixed));
+    console.log(chalk.hex('#3AAFA9')(messages.allFixed));
 }
 
 // Message if no changes are made
 export function showNoChangesMessage() {
-    console.log(chalk.yellow(messages.noChanges));
+    console.log(chalk.hex('#3AAFA9')(messages.noChanges));
 }

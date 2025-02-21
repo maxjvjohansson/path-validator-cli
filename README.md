@@ -2,17 +2,16 @@
 
 # Path Validator CLI Tool
 
-A command-line tool for validating and fixing path naming conventions across your project files.
+A command-line tool for validating and fixing path naming conventions across your project files so you can deploy without any issues. 
 
 ## Features
 
-- ✅ Validates file and directory names against common naming conventions.
+- Validates file and directory names against common naming conventions.
 - Support for HTML, CSS, PHP, and JavaScript projects.
-- 🔍 Detects issues like:
+- Detects issues like:
   - Spaces in filenames
   - Special characters
   - Inconsistent casing
-  - Invalid path lengths
   - Platform-specific path incompatibilities
 - 🛠️ Automatically fixes detected issues (when not using --check-only)
 - 📋 Generates detailed reports of found issues
@@ -64,10 +63,7 @@ path-validator --check-only
 By default, Path Validator follows these rules:
 - No spaces in filenames
 - No special characters except `-` and `_`
-- Maximum path length of 255 characters
 - Case-sensitive naming
-
-You can customize these rules by creating a `.pathvalidatorrc` file in your project root.
 
 ## Output
 
@@ -75,8 +71,6 @@ The tool provides detailed feedback about invalid paths found in your codebase:
 
 <img src="https://github.com/user-attachments/assets/c705afd8-53fb-4914-af9e-53a0e442637e" width="500" alt="Path Validator Output Example 1">
 <img src="https://github.com/user-attachments/assets/5dbe459c-3900-4ade-8989-4285b9f3bf12" width="500" alt="Path Validator Output Example 2">
-
-
 
 
 Each issue shows:
@@ -99,13 +93,9 @@ If you encounter any issues or have questions, please file an issue on the GitHu
 - [ ] Implement recursive mode for nested directories
 - [ ] Add ignore patterns support
 - [ ] Support for other programming languages like C#
+- [ ] A path-validator --undo command
 
 ## Authors
 
 - Max Johansson - [maxjvjohansson](https://github.com/maxjvjohansson)
 - Jesper Skeppstedt - [Skjesper](https://github.com/Skjesper)
-
-## Acknowledgments
-
-- Thanks to all contributors who have helped shape this tool
-- Inspired by similar tools in the ecosystem

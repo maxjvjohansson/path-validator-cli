@@ -58,12 +58,16 @@ path-validator --check-only
 
 ```
 
-## Configuration
+## Dependencies
 
-By default, Path Validator follows these rules:
-- No spaces in filenames
-- No special characters except `-` and `_`
-- Case-sensitive naming
+- **chalk**: Colors and styles text output in the terminal 
+- **commander**: Creates and manages command-line interfaces (CLI) and parses arguments 
+- **fast-glob**: Quickly finds files and directories using pattern matching 
+- **figlet**: Converts text into ASCII art banners 
+- **inquirer**: Creates interactive command-line prompts and forms
+- **ora**: Displays elegant loading spinners in the terminal
+
+
 
 ## Output
 
@@ -75,7 +79,7 @@ The tool provides detailed feedback about invalid paths found in your codebase:
 
 Each issue shows:
 - The invalid path that was found
-- The file where this path is referenced
+- The file where this path is referenced where you can ctr-click(pc) or command-click(mac) to go to the referenced file
 - The exact line number where the reference occurs
 - A helpful suggestion for fixing the issue
 - ..and a passive aggressive reality check based on how many issues there are. 

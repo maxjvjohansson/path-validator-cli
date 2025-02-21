@@ -79,7 +79,7 @@ The tool provides detailed feedback about invalid paths found in your codebase:
 
 Each issue shows:
 - The invalid path that was found
-- The file where this path is referenced where you can ctr-click(pc) or command-click(mac) to go to the referenced file
+- In the file where the path is referenced, you can Ctrl-click (PC) or Command-click (Mac) to open the referenced file.
 - The exact line number where the reference occurs
 - A helpful suggestion for fixing the issue
 - ..and a passive aggressive reality check based on how many issues there are. 

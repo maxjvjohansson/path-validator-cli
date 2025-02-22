@@ -19,67 +19,80 @@ export async function validatePaths(projectRoot) {
         '.php': parsePHP
     };
 
+    const seenInvalidPaths = new Set();
+
     for (const file of searchedFiles) {
         const content = await fs.promises.readFile(file.path, 'utf-8');
         const lines = content.split('\n');
         const parser = parsers[file.extension];
-
+     
         if (parser) {
             const extractedPaths = parser(content, file.path, projectRoot);
-
+     
             extractedPaths.invalidMatches.forEach(pathData => {
                 const importPath = pathData.path;
                 const fileDir = path.dirname(file.path);
                 let fullPath = path.resolve(fileDir, importPath);
                 let issueType = null;
                 let dynamicSuggestion = "";
-
-                // Find the line number where the issue occurs
+     
+                // Avoid duplicated path flagging
+                const uniqueKey = `${file.path}:${importPath}`;
+                if (seenInvalidPaths.has(uniqueKey)) {
+                    return; // Exit if already flagged once
+                }
+                seenInvalidPaths.add(uniqueKey);
+     
+                // Find the correct line number for each issue
                 const lineNumber = lines.findIndex(line => line.includes(importPath)) + 1;
 
-                // Case 1: Absolute paths that may break after deployment
+                if (importPath.startsWith('./')) {
+                    const fullRelativePath = path.resolve(fileDir, importPath);
+                    if (fs.existsSync(fullRelativePath)) {
+                        validPaths.push({
+                            path: importPath,
+                            sourceFile: file.path,
+                            lineNumber
+                        });
+                        return; // Return if it's already correctly relative
+                    }
+                }
+     
+                // Identify possible path problems
                 if (importPath.startsWith('/')) {
                     issueType = "absolutePath";
                     let cleanPath = importPath.replace(/^\/+/, "");
-                    let targetPath = path.join(projectRoot, cleanPath);
-                    let relativePath = path.relative(fileDir, targetPath);
-
-                    if (relativePath === '') relativePath = './';
-                    else if (!relativePath.startsWith('../') && !relativePath.startsWith('./')) relativePath = `./${relativePath}`;
-                    else if (relativePath.startsWith('../../')) relativePath = relativePath.replace(/^(\.\.\/)+/, '../');
-
+                    let fileDirectory = path.dirname(file.path);
+                    
+                    let parentDir = path.dirname(fileDirectory);
+                    while (parentDir !== projectRoot && path.basename(parentDir) !== path.basename(path.dirname(fileDirectory))) {
+                        parentDir = path.dirname(parentDir);
+                    }
+                    let targetPath = path.join(parentDir, cleanPath);
+                    if (!fs.existsSync(targetPath)) {
+                        targetPath = path.join(projectRoot, cleanPath);
+                    }
+                    
+                    let relativePath = path.relative(fileDirectory, targetPath);
+                    if (!relativePath.startsWith('.')) {
+                        relativePath = `./${relativePath}`;
+                    }                    
                     dynamicSuggestion = errorMessages[issueType].suggestion(relativePath);
-                }
-
-                // Case 2: Missing files → Check if the file exists elsewhere in the project
-                else if (!fs.existsSync(fullPath)) {
+                } else if (!fs.existsSync(fullPath)) {
                     issueType = "missingFile";
-
-                    // Try to find the correct path instead of just saying "File does not exist"
                     const correctRelativePath = findCorrectPath(importPath, projectFilePaths, fileDir);
-
                     dynamicSuggestion = errorMessages[issueType].suggestion(correctRelativePath);
-                }
-
-                // Case 3: Relative paths that escape project root
-                else if (importPath.startsWith('..') && !fullPath.startsWith(projectRoot)) {
+                } else if (importPath.startsWith('..') && !fullPath.startsWith(projectRoot)) {
                     issueType = "tooManyBack";
                     dynamicSuggestion = errorMessages[issueType].suggestion;
-                }
-
-                // Case 4: Incorrect relative paths
-                else if (importPath.startsWith("./") || importPath.startsWith("../")) {
+                } else if (importPath.startsWith("../")) {
                     issueType = "incorrectRelative";
                     dynamicSuggestion = errorMessages[issueType].suggestion;
-                }
-
-                // Case 5: Unknown path issue
-                else {
+                } else {
                     issueType = "unknownPath";
                     dynamicSuggestion = errorMessages[issueType].suggestion;
                 }
-
-                // Push the issue with the dynamically built suggestion
+     
                 if (issueType) {
                     invalidPaths.push({
                         ...pathData,
@@ -97,23 +110,30 @@ export async function validatePaths(projectRoot) {
 
 function findCorrectPath(brokenPath, projectFilePaths, fileDir) {
     const filename = path.basename(brokenPath);
-    
-    // Find all occurrences of the file in the project
     const possibleMatches = projectFilePaths.filter(filePath => filePath.endsWith(filename));
 
     if (possibleMatches.length === 1) {
         return path.relative(fileDir, possibleMatches[0]); // Return correct relative path
-    } 
-    
+    }
+
     if (possibleMatches.length > 1) {
-        // Multiple matches found, return the closest match
-        return possibleMatches
+        // Find closest match based on path
+        const closestMatch = possibleMatches
             .map(match => ({
                 path: match,
                 distance: path.relative(fileDir, match).split(path.sep).length
             }))
             .sort((a, b) => a.distance - b.distance)[0].path;
+
+        let relativePath = path.relative(fileDir, closestMatch);
+
+        // Avoid unnecessary use of ../
+        if (!relativePath.startsWith('../') && !relativePath.startsWith('./')) {
+            relativePath = `./${relativePath}`;
+        }
+
+        return relativePath;
     }
 
-    return null; // No suitable match found
+    return null; // If no match was found return null
 }

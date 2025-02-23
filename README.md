@@ -2,20 +2,24 @@
 
 # Path Validator CLI Tool
 
-A command-line tool for validating and fixing path naming conventions across your project files so you can deploy without any issues. 
+A command-line tool that ensures your project paths work not just locally, but also in production deployments.
+
+## What Does It Do?
+
+This tool helps developers avoid common path-related issues that can break projects when moving from a local environment to production. It scans your project for path inconsistencies and suggests (or automatically applies) fixes to ensure smooth deployment.
 
 ## Features
 
-- Validates file and directory names against common naming conventions.
-- Support for HTML, CSS, PHP, and JavaScript projects.
-- Detects issues like:
-  - Spaces in filenames
-  - Special characters
-  - Inconsistent casing
-  - Platform-specific path incompatibilities
-- 🛠️ Automatically fixes detected issues (when not using --check-only)
-- 📋 Generates detailed reports of found issues
-- ⚡ Fast and lightweight
+- Scans and validates paths across HTML, CSS, PHP, and JavaScript projects
+- Automatically adjusts paths that work locally but would break in deployment
+- Detects and fixes issues like:
+  - Incorrect relative paths (../, ./, /)
+  - Paths that work locally but break when deployed
+  - Absolute paths that need to be relative
+  - Missing files or incorrect references
+- Automatically applies fixes (when not using --check-only)
+- Generates a clear report of all detected issues and suggested corrections
+- Fast, lightweight & easy to use
 
 
 
@@ -94,9 +98,8 @@ If you encounter any issues or have questions, please file an issue on the GitHu
 
 ## Roadmap
 
-- [ ] Implement recursive mode for nested directories
-- [ ] Add ignore patterns support
-- [ ] Support for other programming languages like C#
+- [ ] Add support for validating/correcting edge cases
+- [ ] Support for other programming languages and frameworks like C#, React and more
 - [ ] A path-validator --undo command
 
 ## Authors

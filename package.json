@@ -33,5 +33,10 @@
     "url-checker"
   ],
   "author": "Max Johansson & Jesper Skeppstedt",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/maxjvjohansson/path-validator-cli.git"
+  },
+  "homepage": "https://github.com/maxjvjohansson/path-validator-cli#readme"
 }

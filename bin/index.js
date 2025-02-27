@@ -19,7 +19,7 @@ const program = new Command();
 
 program
     .name("path-validator")
-    .version("1.0.0")
+    .version("1.0.4")
     .description("Validate and fix broken file paths in your project")
     .option("--check-only", "Only validate paths without fixing them")
     .action(async (options) => {
